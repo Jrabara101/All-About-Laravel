@@ -4,4 +4,4 @@ A learning platform created by me about all my progess and learning on PHP and L
 
 All my projects will also be included for this
 
-All the best! Allout!
+All the best! Allout! Life goes.
