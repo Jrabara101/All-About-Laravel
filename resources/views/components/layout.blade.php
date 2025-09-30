@@ -16,7 +16,7 @@
                 <div class="flex h-16 items-center justify-between">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
-                            <img class="h-8 w-8" src="https://laracasts.com/images/logo/logo-triangle.svg"
+                            <img class="h-8 w-8" src="https://logospng.org/download/laravel/logo-laravel-icon-1024.png"
                                  alt="Your Company">
                         </div>
                         <div class="hidden md:block">
@@ -33,6 +33,14 @@
                                 <x-nav-link href="/login" :active="request()->is('login')">Log In</x-nav-link>
                                 <x-nav-link href="/register" :active="request()->is('register')">Register</x-nav-link>
                             @endguest
+
+                              @auth
+                                    <form method="POST" action="/logout">
+                                        @csrf
+
+                                        <x-form-button>Log Out</x-form-button>
+                                    </form>
+                            @endauth
                         </div>
                     </div>
                     <div class="-mr-2 flex md:hidden">
@@ -72,7 +80,7 @@
                 <div class="border-t border-gray-700 pb-3 pt-4">
                     <div class="flex items-center px-5">
                         <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full" src="https://laracasts.com/images/lary-ai-face.svg"
+                            <img class="h-10 w-10 rounded-full" src="https://logospng.org/download/laravel/logo-laravel-icon-1024.png"
                                  alt="">
                         </div>
                         <div class="ml-3">
