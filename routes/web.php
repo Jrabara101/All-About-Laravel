@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionController;
+use App\Jobs\TranslateJob;
 use App\Models\Job;
 use App\Mail\JobPosted;
 use Illuminate\Support\Facades\Mail;
@@ -13,6 +14,15 @@ Route::get('send-job-posted', function () {
     Mail::to('testing@mailtrap.io')->send(new JobPosted($job));
     return 'Job Posted mail sent!';
 });
+
+Route::get('test', function () {
+    $job = Job::first();
+
+    TranslateJob::dispatch($job);
+
+    return 'Done';
+});
+
 
 Route::view('/', 'home');
 Route::view('/contact', 'contact');
