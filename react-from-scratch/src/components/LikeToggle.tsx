@@ -17,7 +17,7 @@ export function LikeToggle({
       className="group"
       onClick={() => {
         if (liked.includes(id)) {
-          setLiked(liked.filter((pupId) => pupId !== id));
+          setLiked(liked.filter((songid) => songid !== id));
         } else {
           setLiked([...liked, id]);
         }
