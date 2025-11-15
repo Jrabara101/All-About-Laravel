@@ -1,27 +1,32 @@
+import { Dispatch, SetStateAction } from "react";
 import { type song } from "../types";
 import { LikeToggle } from "./LikeToggle";
-import { Dispatch, SetStateAction } from "react";
 
 export function SongList({
+  searchQuery,
   song,
   liked,
   setLiked,
 }: {
+  searchQuery: string;
   song: song[];
   liked: song["id"][];
   setLiked: Dispatch<SetStateAction<song["id"][]>>;
 }) {
-
   return (
     <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {song.map((song) => (
-         <SongCard
-          key={song.id}
-          song={song}
-          liked={liked}
-          setLiked={setLiked}
-        />
-      ))}
+      {song
+        .filter((song) =>
+          song.vibe.toLowerCase().includes(searchQuery.toLowerCase()),
+        )
+        .map((song) => (
+          <SongCard
+            key={song.id}
+            song={song}
+            liked={liked}
+            setLiked={setLiked}
+          />
+        ))}
     </ul>
   );
 }
@@ -49,7 +54,7 @@ function SongCard({ song, liked, setLiked }: SongCardProps) {
           <span className="text-slate-300">·</span>
           <p className="text-slate-500">{song.vibe}</p>
         </div>
-          <LikeToggle id={song.id} liked={liked} setLiked={setLiked} />
+          <LikeToggle id={song.id} />
       </div>
     </li>
   );
