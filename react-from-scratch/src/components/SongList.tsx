@@ -54,7 +54,7 @@ function SongCard({ song, liked, setLiked }: SongCardProps) {
           <span className="text-slate-300">·</span>
           <p className="text-slate-500">{song.vibe}</p>
         </div>
-          <LikeToggle id={song.id} />
+          <LikeToggle id={song.id} liked={liked} setLiked={setLiked} />
       </div>
     </li>
   );

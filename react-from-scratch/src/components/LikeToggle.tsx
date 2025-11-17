@@ -1,27 +1,43 @@
-import { Heart } from "lucide-react";
-import { useLiked } from "../context";
+import { Heart, LoaderCircle } from "lucide-react";
 import { song } from "../types";
+import { Dispatch, SetStateAction, useState } from "react";
 
-export function LikeToggle({ id }: { id: song["id"] }) {
-  const { liked, setLiked } = useLiked();
+export function LikeToggle({
+  id,
+  liked,
+  setLiked,
+}: {
+  id: song["id"];
+  liked: song["id"][];
+  setLiked: Dispatch<SetStateAction<song["id"][]>>;
+}) {
+  const [pending, setPending] = useState(false);
   return (
     <button
       className="group"
       onClick={() => {
-        if (liked.includes(id)) {
-          setLiked(liked.filter((songid) => songid !== id));
-        } else {
-          setLiked([...liked, id]);
-        }
+        setPending(true);
+        setTimeout(() => {
+          if (liked.includes(id)) {
+            setLiked(liked.filter((songId) => songId !== id));
+          } else {
+            setLiked([...liked, id]);
+          }
+          setPending(false);
+        }, 1500);
       }}
     >
-      <Heart
-        className={
-                 liked.includes(id)
-            ? "fill-pink-500 stroke-none"
-            : "stroke-slate-200 group-hover:stroke-slate-300"
-        }
-      />
+  {pending ? (
+        <LoaderCircle className="animate-spin stroke-slate-300" />
+      ) : (
+        <Heart
+          className={
+            liked.includes(id)
+              ? "fill-pink-500 stroke-none"
+              : "stroke-slate-200 group-hover:stroke-slate-300"
+          }
+        />
+      )}
     </button>
   );
 }
