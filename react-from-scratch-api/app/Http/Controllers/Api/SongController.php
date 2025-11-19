@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\SongCollection;
+use App\Http\Resources\SongResource;
+use App\Models\Song;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -10,9 +13,8 @@ class SongController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index() {
+        return (new SongCollection(Song::all()))->withoutWrapping();
     }
 
     /**
@@ -26,9 +28,8 @@ class SongController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
+    public function show(Song $song) {
+        return new SongResource($song);
     }
 
     /**

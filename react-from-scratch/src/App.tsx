@@ -49,36 +49,58 @@ function Main() {
 }
 
 function ApiSongs() {
-  const [apiSongs, setApiSongs] = useState<[]>([]);
+  const [apiSongs, setApiSongs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>("");
   useEffect(() => {
     async function getSongs() {
       setIsLoading(true);
+      setError("");
       try {
-        const response = await fetch("http://react-backend.test/api/Songs");
+        const response = await fetch("http://localhost:8000/api/songs", {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
         if (!response.ok) {
-          const errorData = await response.json();
-          setError(`${errorData.message}: ${errorData.details}`);
-          throw errorData;
+          let errorMessage = `HTTP error! status: ${response.status}`;
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.message || errorData.error || errorMessage;
+            if (errorData.errors) {
+              errorMessage += ` - ${JSON.stringify(errorData.errors)}`;
+            }
+          } catch (e) {
+            // If response is not JSON, use status text
+            errorMessage = response.statusText || errorMessage;
+          }
+          setError(errorMessage);
+          return;
         }
         const data = await response.json();
-        setApiSongs(data);
-      } catch (error) {
-        console.log(error);
+        setApiSongs(Array.isArray(data) ? data : []);
+      } catch (error: any) {
+        console.error("API Error:", error);
+        setError(error.message || "Failed to fetch songs. Please check if the API server is running.");
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
 
     getSongs();
   }, []);
   return (
     <div className="mt-12 bg-white p-6 shadow ring ring-black/5">
+      <h2 className="mb-4 text-xl font-semibold">API Songs</h2>
       {isLoading && <LoaderCircle className="animate-spin stroke-slate-300" />}
-      {apiSongs.length > 0 && (
-        <pre>{JSON.stringify(apiSongs, null, 2)}</pre>
-      )}
       {error && <p className="text-red-500">{error}</p>}
+      {!isLoading && !error && apiSongs.length === 0 && (
+        <p className="text-gray-500">No songs found in the database.</p>
+      )}
+      {apiSongs.length > 0 && (
+        <pre className="overflow-auto">{JSON.stringify(apiSongs, null, 2)}</pre>
+      )}
     </div>
   );
 }
