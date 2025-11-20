@@ -14,7 +14,7 @@ class SongController extends Controller
      * Display a listing of the resource.
      */
     public function index() {
-        return (new SongCollection(Song::all()))->withoutWrapping();
+        return response()->json(Song::all());
     }
 
     /**

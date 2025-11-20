@@ -8,5 +8,10 @@ class Song extends Model
 {
      use HasFactory;
 
-    protected $fillable = ['title', 'artist', 'album', 'image_url'];
+    protected $fillable = [
+    'name',
+    'vibe',
+    'imagePath',
+];
+
 }

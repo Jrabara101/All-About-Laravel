@@ -16,10 +16,9 @@ class SongResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'artist' => $this->artist,
-            'album' => $this->album,
-            'image_url' => $this->image_url,
+            'name' => $this->name,
+            'vibe' => $this->vibe,
+            'imagePath' => $this->imagePath,
         ];
     }
 }

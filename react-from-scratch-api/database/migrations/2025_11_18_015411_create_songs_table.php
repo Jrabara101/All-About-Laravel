@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('artist');
-            $table->string('album')->nullable();
-            $table->string('image_url')->nullable();
+            $table->string('name');        // Artist name (not title)
+            $table->string('vibe');        // Song name, mood, or album
+            $table->string('imagePath');   // Path to image
             $table->timestamps();
         });
     }

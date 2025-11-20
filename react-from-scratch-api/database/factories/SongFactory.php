@@ -17,10 +17,9 @@ class SongFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->sentence(3),
-            'artist' => $this->faker->name,
-            'album' => $this->faker->word,
-            'image_url' => $this->faker->imageUrl(),
+            'name' => $this->faker->name,
+            'vibe' => $this->faker->sentence,
+            'imagePath' => '/images/' . $this->faker->word . '.jpg',
         ];
     }
 }
