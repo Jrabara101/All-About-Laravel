@@ -1,61 +1,64 @@
-import { Dispatch, SetStateAction } from "react";
-import { type song } from "../types";
+import { Song } from "../types";
 import { LikeToggle } from "./LikeToggle";
+import { Dispatch, SetStateAction } from "react";
 
 export function SongList({
   searchQuery,
-  song,
-  liked,
-  setLiked,
+  songs,
+  currentUserId,
+  setSongs,
 }: {
   searchQuery: string;
-  song: song[];
-  liked: song["id"][];
-  setLiked: Dispatch<SetStateAction<song["id"][]>>;
+  songs: Song[];
+  currentUserId: number;
+  setSongs: Dispatch<SetStateAction<Song[]>>;
 }) {
+  // toggle likedBy local function
+  const handleToggleLiked = (id: number) => {
+    setSongs(
+      songs.map((song) =>
+        song.id === id
+          ? {
+              ...song,
+              likedBy: song.likedBy.includes(currentUserId)
+                ? song.likedBy.filter((uid) => uid !== currentUserId)
+                : [...song.likedBy, currentUserId],
+            }
+          : song
+      )
+    );
+  };
+
   return (
     <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {song
+      {songs
         .filter((song) =>
-          song.vibe.toLowerCase().includes(searchQuery.toLowerCase()),
+          song.trait.toLowerCase().includes(searchQuery.toLowerCase())
         )
         .map((song) => (
-          <SongCard
+          <li
             key={song.id}
-            song={song}
-            liked={liked}
-            setLiked={setLiked}
-          />
+            className="overflow-clip rounded-lg bg-white shadow-md ring ring-black/5 hover:-translate-y-0.5"
+          >
+            <img
+              className="aspect-square object-cover"
+              alt={song.name}
+              src={song.imageUrl}
+            />
+            <div className="gap flex items-center justify-between p-4 text-sm">
+              <div className="flex items-center gap-2">
+                <p className="font-semibold">{song.name}</p>
+                <span className="text-slate-300">·</span>
+                <p className="text-slate-500">{song.trait}</p>
+              </div>
+              <LikeToggle
+                song={song}
+                onToggle={handleToggleLiked}
+                currentUserId={currentUserId}
+              />
+            </div>
+          </li>
         ))}
     </ul>
-  );
-}
-
-type SongCardProps = {
-  song: song;
-  liked: song["id"][];
-  setLiked: Dispatch<SetStateAction<song["id"][]>>;
-};
-
-function SongCard({ song, liked, setLiked }: SongCardProps) {
-  return (
-    <li
-      key={song.id}
-      className="overflow-clip rounded-lg bg-white shadow-md ring ring-black/5 hover:-translate-y-0.5"
-    >
-      <img
-        className="aspect-square object-cover"
-        alt={song.name}
-        src={song.imagePath}
-      />
-      <div className="gap flex items-center justify-between p-4 text-sm">
-        <div className="flex items-center gap-2">
-          <p className="font-semibold">{song.name}</p>
-          <span className="text-slate-300">·</span>
-          <p className="text-slate-500">{song.vibe}</p>
-        </div>
-          <LikeToggle id={song.id} liked={liked} setLiked={setLiked} />
-      </div>
-    </li>
   );
 }

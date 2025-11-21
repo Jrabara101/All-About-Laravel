@@ -9,3 +9,6 @@ Route::get('test', function() {
 
 // Songs API routes
 Route::apiResource('songs', SongController::class);
+// Optional for like/unlike:
+Route::post('songs/{song}/like', [SongController::class, 'like']);
+Route::post('songs/{song}/unlike', [SongController::class, 'unlike']);

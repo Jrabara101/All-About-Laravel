@@ -1,40 +1,46 @@
-import { song } from "../types";
+import { Song } from "../types";
 
-export const songs: song[] = [
+export const songs: Song[] = [
   {
     id: 1,
     name: "Alisson Shore",
-    vibe: "HOYA",
-    imagePath: "/images/Alisson.jpg",
+    trait: "HOYA",
+    imageUrl: "/images/Alisson.jpg",
+    likedBy: [],
   },
   {
     id: 2,
     name: "Bruno",
-    vibe: "Just the way you are",
-    imagePath: "/images/Bruno.jpg",
+    trait: "Just the way you are",
+    imageUrl: "/images/Bruno.jpg",
+    likedBy: [],
   },
   {
     id: 3,
     name: "Bruno1",
-    vibe: "Locked out of heaven",
-    imagePath: "/images/Bruno1.jpg",
+    trait: "Locked out of heaven",
+    imageUrl: "/images/Bruno1.jpg",
+    likedBy: [],
   },
   {
     id: 4,
     name: "Dionela",
-    vibe: "Marilag",
-    imagePath: "/images/Dionela.jpg",
+    trait: "Marilag",
+    imageUrl: "/images/Dionela.jpg",
+    likedBy: [],
   },
   {
     id: 5,
     name: "Frank Ocean",
-    vibe: "Blonde",
-    imagePath: "/images/Frank.jpg",
+    trait: "Blonde",
+    imageUrl: "/images/Frank.jpg",
+    likedBy: [],
   },
   {
     id: 6,
     name: "Harry Styles",
-    vibe: "As It Was",
-    imagePath: "/images/Harry.jpg",
+    trait: "As It Was",
+    imageUrl: "/images/Harry.jpg",
+    likedBy: [],
   },
 ];

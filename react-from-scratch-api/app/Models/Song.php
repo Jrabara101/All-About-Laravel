@@ -6,12 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Song extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
-    'name',
-    'vibe',
-    'imagePath',
-];
+        'name',
+        'trait',
+        'imageUrl',
+        'likedBy',
+    ];
 
+    protected $casts = [
+        'likedBy' => 'array', // will cast JSON to array automatically
+    ];
 }

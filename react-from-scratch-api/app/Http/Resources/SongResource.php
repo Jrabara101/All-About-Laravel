@@ -7,18 +7,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class SongResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray($request)
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'vibe' => $this->vibe,
-            'imagePath' => $this->imagePath,
+            'trait' => $this->trait,
+            'imageUrl' => $this->imageUrl,
+            'likedBy' => $this->likedBy,
         ];
     }
 }

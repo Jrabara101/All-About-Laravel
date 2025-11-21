@@ -6,24 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
-            $table->string('name');        // Artist name (not title)
-            $table->string('vibe');        // Song name, mood, or album
-            $table->string('imagePath');   // Path to image
+            $table->string('name'); // artist name
+            $table->string('trait'); // song title or trait
+            $table->string('imageUrl'); // image path/url
+            $table->json('likedBy')->default('[]'); // store array of liked user IDs
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('songs');
     }
