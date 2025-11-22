@@ -13,22 +13,6 @@ export function SongList({
   currentUserId: number;
   setSongs: Dispatch<SetStateAction<Song[]>>;
 }) {
-  // toggle likedBy local function
-  const handleToggleLiked = (id: number) => {
-    setSongs(
-      songs.map((song) =>
-        song.id === id
-          ? {
-              ...song,
-              likedBy: song.likedBy.includes(currentUserId)
-                ? song.likedBy.filter((uid) => uid !== currentUserId)
-                : [...song.likedBy, currentUserId],
-            }
-          : song
-      )
-    );
-  };
-
   return (
     <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {songs
@@ -53,8 +37,8 @@ export function SongList({
               </div>
               <LikeToggle
                 song={song}
-                onToggle={handleToggleLiked}
                 currentUserId={currentUserId}
+                setSongs={setSongs}
               />
             </div>
           </li>

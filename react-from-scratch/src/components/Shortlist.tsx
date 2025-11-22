@@ -1,6 +1,7 @@
 import { Song } from "../types";
-import { Heart, X } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
+import { Heart, X, LoaderCircle } from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { unlikeSong } from "../queries";
 
 export function Shortlist({
   songs,
@@ -33,26 +34,56 @@ export function Shortlist({
                 src={song.imageUrl}
               />
               <p className="px-3 text-sm text-slate-800">{song.name}</p>
-              <button
-                onClick={() =>
-                  setSongs(
-                    songs.map((s) =>
-                      s.id === song.id
-                        ? {
-                            ...s,
-                            likedBy: s.likedBy.filter((uid) => uid !== currentUserId),
-                          }
-                        : s
-                    )
-                  )
-                }
-                className="group h-full border-l border-slate-100 px-2 hover:bg-slate-100"
-              >
-                <X className="size-4 stroke-slate-400 group-hover:stroke-red-400" />
-              </button>
+              <DeleteButton
+                id={song.id}
+                currentUserId={currentUserId}
+                setSongs={setSongs}
+              />
             </li>
           ))}
       </ul>
     </div>
+  );
+}
+
+function DeleteButton({
+  id,
+  currentUserId,
+  setSongs,
+}: {
+  id: Song["id"];
+  currentUserId: number;
+  setSongs: Dispatch<SetStateAction<Song[]>>;
+}) {
+  const [pending, setPending] = useState(false);
+
+  return (
+    <button
+      onClick={async () => {
+        setPending(true);
+        try {
+          // Call backend to unlike song
+          const updatedSong = await unlikeSong(id, currentUserId);
+          // Update local state with returned data
+          setSongs((prevSongs) =>
+            prevSongs.map((s) =>
+              s.id === updatedSong.id ? updatedSong : s
+            )
+          );
+        } catch (error) {
+          console.error("Failed to unlike:", error);
+        } finally {
+          setPending(false);
+        }
+      }}
+      disabled={pending}
+      className="group h-full border-l border-slate-100 px-2 hover:bg-slate-100 disabled:cursor-not-allowed"
+    >
+      {pending ? (
+        <LoaderCircle className="size-4 animate-spin stroke-slate-300" />
+      ) : (
+        <X className="size-4 stroke-slate-400 group-hover:stroke-red-400" />
+      )}
+    </button>
   );
 }

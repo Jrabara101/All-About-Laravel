@@ -5,23 +5,18 @@ import { Search } from "./components/Search";
 import { Shortlist } from "./components/Shortlist";
 import { SongForm } from "./components/SongForm";
 import { SongList } from "./components/SongList";
-import { songs as songsData } from "./data/songs";
-
-
+import { getSongs } from "./queries";
 import { Song } from "./types";
 import { ErrorBoundary } from "react-error-boundary";
-import { getSongs } from "./queries";
 import { LoaderCircle } from "lucide-react";
 import { Suspense, use, useState } from "react";
-import { songs as SongData } from "./data/songs";
-
 
 export function App() {
   return (
     <PageWrapper>
       <Container>
         <Header />
-         <ErrorBoundary
+        <ErrorBoundary
           fallbackRender={({ error }) => (
             <div className="mt-12 bg-red-100 p-6 shadow ring ring-black/5">
               <p className="text-red-500">
@@ -45,14 +40,13 @@ export function App() {
   );
 }
 
-const songpromise = getSongs();
-
+const songPromise = getSongs();
 
 function Main() {
-  const apiSongs = use(songpromise);
+  const apiSongs = use(songPromise);
   const [songs, setSongs] = useState<Song[]>(apiSongs);
   const [searchQuery, setSearchQuery] = useState("");
-  const currentUserId = 1; // You can set this from context/auth
+  const currentUserId = 1; // Set from context/auth later
 
   return (
     <main>
@@ -66,7 +60,7 @@ function Main() {
         searchQuery={searchQuery}
         setSongs={setSongs}
       />
-      <SongForm songs={songs} setSongs={setSongs} />
+      <SongForm songs={songs} setSongs={setSongs} currentUserId={currentUserId} />
     </main>
   );
 }

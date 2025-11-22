@@ -1,15 +1,17 @@
 import { Heart, LoaderCircle } from "lucide-react";
 import { Song } from "../types";
 import { useState } from "react";
+import { toggleLikedStatus } from "../queries";
+import { Dispatch, SetStateAction } from "react";
 
 export function LikeToggle({
   song,
-  onToggle,
   currentUserId,
+  setSongs,
 }: {
   song: Song;
-  onToggle: (id: number) => void;
   currentUserId: number;
+  setSongs: Dispatch<SetStateAction<Song[]>>;
 }) {
   const [pending, setPending] = useState(false);
   const liked = song.likedBy.includes(currentUserId);
@@ -17,12 +19,23 @@ export function LikeToggle({
   return (
     <button
       className="group"
-      onClick={() => {
+      disabled={pending}
+      onClick={async () => {
         setPending(true);
-        setTimeout(() => {
-          onToggle(song.id);
+        try {
+          // Call backend to toggle like status
+          const updatedSong = await toggleLikedStatus(song.id, currentUserId);
+          // Update local state with returned data from backend
+          setSongs((prevSongs) =>
+            prevSongs.map((s) =>
+              s.id === updatedSong.id ? updatedSong : s
+            )
+          );
+        } catch (error) {
+          console.error("Failed to toggle like:", error);
+        } finally {
           setPending(false);
-        }, 500); // Faster feedback
+        }
       }}
     >
       {pending ? (
