@@ -27,8 +27,8 @@ export function LikeToggle({
           const updatedSong = await toggleLikedStatus(song.id, currentUserId);
           // Update local state with returned data from backend
           setSongs((prevSongs) =>
-            prevSongs.map((s) =>
-              s.id === updatedSong.id ? updatedSong : s
+            prevSongs.map((existingSong) =>
+              existingSong.id === updatedSong.id ? updatedSong : existingSong
             )
           );
         } catch (error) {
