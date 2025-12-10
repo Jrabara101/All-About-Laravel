@@ -19,15 +19,17 @@ export function App() {
         <ErrorBoundary
           fallbackRender={({ error }) => (
             <div className="mt-12 bg-red-100 p-6 shadow ring ring-black/5">
-              <p className="text-red-500">
-                {error.message}: {error.details}
+              <p className="text-red-500 font-semibold">Error loading songs:</p>
+              <p className="text-red-600 mt-2">{error.message}</p>
+              <p className="text-sm text-gray-600 mt-4">
+                Make sure the Laravel API server is running at http://react-backend.test/react-from-scratch-api
               </p>
             </div>
           )}
         >
           <Suspense
             fallback={
-              <div className="mt-12 bg-white p-6 shadow ring ring-black/5">
+              <div className="mt-12 grid h-48 place-items-center">
                 <LoaderCircle className="animate-spin stroke-slate-300" />
               </div>
             }
@@ -46,21 +48,19 @@ function Main() {
   const apiSongs = use(songPromise);
   const [songs, setSongs] = useState<Song[]>(apiSongs);
   const [searchQuery, setSearchQuery] = useState("");
-  const currentUserId = 1; // Set from context/auth later
 
   return (
     <main>
       <div className="mt-24 grid gap-8 sm:grid-cols-2">
         <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-        <Shortlist songs={songs} currentUserId={currentUserId} setSongs={setSongs} />
+        <Shortlist songs={songs} setSongs={setSongs} />
       </div>
       <SongList
         songs={songs}
-        currentUserId={currentUserId}
         searchQuery={searchQuery}
         setSongs={setSongs}
       />
-      <SongForm songs={songs} setSongs={setSongs} currentUserId={currentUserId} />
+      <SongForm songs={songs} setSongs={setSongs} />
     </main>
   );
 }

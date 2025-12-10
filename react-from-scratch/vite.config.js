@@ -5,4 +5,8 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    host: true, // Allow access from local network
+    port: 5173, // Optional: specify port
+  },
 })

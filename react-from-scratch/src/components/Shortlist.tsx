@@ -1,15 +1,13 @@
-import { Song } from "../types";
-import { Heart, X, LoaderCircle } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
-import { unlikeSong } from "../queries";
+import { Song } from "../types";
+import { Heart, LoaderCircle, X } from "lucide-react";
+import { toggleLikedStatus } from "../queries";
 
 export function Shortlist({
   songs,
-  currentUserId,
   setSongs,
 }: {
   songs: Song[];
-  currentUserId: number;
   setSongs: Dispatch<SetStateAction<Song[]>>;
 }) {
   return (
@@ -20,11 +18,11 @@ export function Shortlist({
       </h2>
       <ul className="mt-4 flex flex-wrap gap-4">
         {songs
-          .filter((song) => song.likedBy.includes(currentUserId))
+          .filter((song) => song.likedBy.includes(1))
           .map((song) => (
             <li
               key={song.id}
-              className="relative flex items-center overflow-clip rounded-md bg-white shadow-sm ring ring-black/5"
+              className="relative flex items-center overflow-clip rounded-md bg-white shadow-sm ring ring-black/5 transition duration-100 starting:scale-0 starting:opacity-0"
             >
               <img
                 height={32}
@@ -34,11 +32,7 @@ export function Shortlist({
                 src={song.imageUrl}
               />
               <p className="px-3 text-sm text-slate-800">{song.name}</p>
-              <DeleteButton
-                id={song.id}
-                currentUserId={currentUserId}
-                setSongs={setSongs}
-              />
+              <DeleteButton id={song.id} setSongs={setSongs} />
             </li>
           ))}
       </ul>
@@ -48,36 +42,26 @@ export function Shortlist({
 
 function DeleteButton({
   id,
-  currentUserId,
   setSongs,
 }: {
   id: Song["id"];
-  currentUserId: number;
   setSongs: Dispatch<SetStateAction<Song[]>>;
 }) {
   const [pending, setPending] = useState(false);
-
   return (
     <button
       onClick={async () => {
         setPending(true);
-        try {
-          // Call backend to unlike song
-          const updatedSong = await unlikeSong(id, currentUserId);
-          // Update local state with returned data
-          setSongs((prevSongs) =>
-            prevSongs.map((existingSong) =>
-              existingSong.id === updatedSong.id ? updatedSong : existingSong
-            )
+        const updatedSong = await toggleLikedStatus(id);
+        setSongs((prevSongs) => {
+          return prevSongs.map((existingSong) =>
+            existingSong.id === updatedSong.id ? updatedSong : existingSong,
           );
-        } catch (error) {
-          console.error("Failed to unlike:", error);
-        } finally {
-          setPending(false);
-        }
+        });
+        setPending(false);
       }}
+      className="group h-full border-l border-slate-100 px-2 hover:bg-slate-100"
       disabled={pending}
-      className="group h-full border-l border-slate-100 px-2 hover:bg-slate-100 disabled:cursor-not-allowed"
     >
       {pending ? (
         <LoaderCircle className="size-4 animate-spin stroke-slate-300" />

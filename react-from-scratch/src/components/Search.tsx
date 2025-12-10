@@ -1,5 +1,3 @@
-
-
 import { Delete } from "lucide-react";
 import { Dispatch, SetStateAction, useRef } from "react";
 
@@ -10,8 +8,6 @@ export function Search({
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
 }) {
-
-
   const inputRef = useRef(null);
   return (
     <div>
